@@ -1,0 +1,206 @@
+{
+  "info": {
+    "_postman_id": "f6cdb54d-8c30-4b0d-9084-4094a514faed",
+    "name": "Sprint_7 — Яндекс Самокат API (ручная проверка)",
+    "description": "Ручная проверка обязательных методов. Перед отправкой заменяйте тестовые логины и даты.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Создать курьера",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/courier",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "courier"
+          ]
+        },
+        "description": "После первого запуска меняйте login на новый уникальный, иначе получите 409.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"{{login}}\",\n  \"password\": \"{{password}}\",\n  \"firstName\": \"{{first_name}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Логин курьера",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/courier/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "courier",
+            "login"
+          ]
+        },
+        "description": "При успешном логине ответ: 200 и id. Скопируйте id в переменную courier_id при необходимости.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"{{login}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Создать заказ",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/orders",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "orders"
+          ]
+        },
+        "description": "Дата в примере — образец: замените на будущую. Измените color на GREY, оба цвета или удалите поле. Успешно: 201 и track.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstName\": \"Тест\",\n  \"lastName\": \"Тестов\",\n  \"address\": \"Москва, улица Тестовая, 5\",\n  \"metroStation\": 4,\n  \"phone\": \"+7 999 123 45 67\",\n  \"rentTime\": 3,\n  \"deliveryDate\": \"2026-12-01\",\n  \"comment\": \"Тестовый заказ Postman\",\n  \"color\": [\n    \"BLACK\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Получить список заказов",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/orders?limit=10&page=0",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "orders"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            }
+          ]
+        },
+        "description": "Успешно: 200, объект JSON с массивом orders."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Удалить тестового курьера",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/courier/{{courier_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "courier",
+            "{{courier_id}}"
+          ]
+        },
+        "description": "Укажите id из успешного логина. Используйте для очистки данных."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://qa-scooter.praktikum-services.ru",
+      "type": "string"
+    },
+    {
+      "key": "login",
+      "value": "qa_manual_change_this_login",
+      "type": "string"
+    },
+    {
+      "key": "password",
+      "value": "qa_manual_password_123",
+      "type": "string"
+    },
+    {
+      "key": "first_name",
+      "value": "ManualTest",
+      "type": "string"
+    },
+    {
+      "key": "courier_id",
+      "value": "0",
+      "type": "string"
+    }
+  ]
+}

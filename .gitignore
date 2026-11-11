@@ -1,0 +1,13 @@
+# Системные / временные файлы Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+.idea/
+.vscode/
+# Сырые результаты Allure не отправляем в GitHub.
+allure-results/
+# Сгенерированный HTML-отчёт allure-report/ НЕ игнорируем:
+# по условиям задания в репозитории нужна папка с отчётом.
