@@ -1,4 +1,6 @@
 
+"""Позитивные и негативные проверки создания курьера."""
+
 import allure
 import pytest
 
@@ -8,18 +10,17 @@ from generators import generate_courier
 @allure.feature("Создание курьера")
 class TestCreateCourier:
 
-    @allure.title("Успешное создание курьера")
+    @allure.title("Курьер успешно создаётся, ответ 201 и ok=true")
     def test_create_courier_success(self, api, courier_cleanup):
         courier = generate_courier()
-        response = api.create_courier(courier)
 
-        if response.status_code == 201:
-            courier_cleanup.append(courier)
+        courier_cleanup.append(courier)
+        response = api.create_courier(courier)
 
         assert response.status_code == 201, response.text
         assert response.json() == {"ok": True}
 
-    @allure.title("Нельзя создать двух курьеров с одинаковым логином")
+    @allure.title("Повторное создание курьера с тем же логином запрещено")
     def test_duplicate_courier_returns_409(self, api, registered_courier):
         response = api.create_courier(registered_courier)
 
@@ -29,17 +30,14 @@ class TestCreateCourier:
         )
 
     @pytest.mark.parametrize("missing_field", ["login", "password"])
-    @allure.title("Создание курьера без обязательного поля {missing_field}")
+    @allure.title("Без обязательного поля {missing_field} курьера создать нельзя")
     def test_missing_required_field_returns_400(
-        self, api, courier_cleanup, missing_field
+        self, api, missing_field
     ):
         courier = generate_courier()
         courier.pop(missing_field)
 
         response = api.create_courier(courier)
-
-        if response.status_code == 201:
-            courier_cleanup.append(courier)
 
         assert response.status_code == 400, response.text
         assert response.json().get("message") == (
@@ -47,17 +45,14 @@ class TestCreateCourier:
         )
 
     @pytest.mark.parametrize("empty_field", ["login", "password"])
-    @allure.title("Создание курьера с пустым полем {empty_field}")
+    @allure.title("С пустым обязательным полем {empty_field} курьера создать нельзя")
     def test_empty_required_field_returns_400(
-        self, api, courier_cleanup, empty_field
+        self, api, empty_field
     ):
         courier = generate_courier()
         courier[empty_field] = ""
 
         response = api.create_courier(courier)
-
-        if response.status_code == 201:
-            courier_cleanup.append(courier)
 
         assert response.status_code == 400, response.text
         assert response.json().get("message") == (
